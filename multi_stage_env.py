@@ -106,19 +106,33 @@ class HighwayConstructionEnv(HighwayEnv):
         if v.crashed:
             return self.config["collision_reward"]
 
-        #Speed reward: ideal range 60–70 mph
-        if 60 <= mph <= 70:
-            r += 1.0
-        else:
-            r -= 0.5 * abs(mph - 65) / 65
-
-        #  Lane change logic 
-        if action in [3, 4]:
-            front_vehicle, _ = v.road.neighbour_vehicles(v, v.lane_index)
-            if front_vehicle and front_vehicle.position[0] - v.position[0] < 20:
-                r += 0.2  # smart lane change
+        # Speed reward: ideal range 60–70 mph
+        lower_bound = 60
+        upper_bound = 70
+        optimal_speed = 65
+        if lower_bound <= mph <= upper_bound:
+            if mph == optimal_speed:
+                r += 2.0
             else:
-                r -= 0.3  # unnecessary lane change
+                r += 1.0 * abs(mph - optimal_speed) / 5
+        else:
+            r -= 1.0 * abs(mph - optimal_speed) / 65
+
+        # if 60 <= mph <= 70:
+        #     r += 1.0
+        # else:
+        #     r -= 0.5 * abs(mph - 65) / 65
+
+        #  Lane change logic
+        if action in [3, 4]:
+            r -= 0.3
+
+        # if action in [3, 4]:
+        #     front_vehicle, _ = v.road.neighbour_vehicles(v, v.lane_index)
+        #     if front_vehicle and front_vehicle.position[0] - v.position[0] < 20:
+        #         r += 0.2  # smart lane change
+        #     else:
+        #         r -= 0.3  # unnecessary lane change
 
         # --- Construction zone penalty ---
         if 400 < v.position[0] < 460:
