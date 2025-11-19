@@ -1,0 +1,24 @@
+# Core Dependencies
+gymnasium>=0.29.0
+highway-env>=1.8.2
+numpy>=1.24.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+pandas>=2.0.0
+
+# Deep RL Framework
+stable-baselines3>=2.1.0
+torch>=2.0.0
+
+# Monitoring and Logging
+tensorboard>=2.13.0
+tqdm>=4.65.0
+
+# Optional but Recommended
+pygame>=2.5.0  # For rendering
+opencv-python>=4.8.0  # For grayscale observations
+pillow>=10.0.0  # Image processing
+
+# Development Tools (optional)
+jupyter>=1.0.0
+ipython>=8.14.0

@@ -1,0 +1,50 @@
+To run my files:-
+
+1. I created virtual env to run this (use can run directly also)
+python3 -m venv venv
+source venv/bin/activate 
+2.Then using the pip command installed all the req
+pip install -r requirements.txt
+3.run the python multi_stage_env.py
+to run this code.
+4. (optional) helps to see demo 
+
+
+python - <<'PY'
+import gymnasium as gym, time
+import __init__   # ensures environment registration
+
+env = gym.make("highway-construction-v0", render_mode="human")
+inner = env.unwrapped
+inner.config["screen_width"]  = 1600
+inner.config["screen_height"] = 600
+inner.config["scaling"]       = 1.2
+inner.config["centering_position"] = [0.3, 0.5]
+inner.config["duration"] = 120
+
+obs, info = env.reset()
+print("🎥 Starting demo...  Press Ctrl+C to stop early.\n")
+
+for step in range(4000):
+    x = inner.vehicle.position[0]   # ego car x position
+    if x < 800:
+        action = 1                  # accelerate
+    elif x < 900:
+        action = 4                  # lane-right toward exit
+    elif 900 <= x < 950:
+        inner.vehicle.lane_index = ("b", "exit", 0)  # go onto exit ramp
+        action = 1
+    else:
+        action = 1
+    obs, reward, done, trunc, info = env.step(action)
+    env.render()
+    time.sleep(0.1)
+    if done or trunc:
+        print("Episode finished (crash or reached end).")
+        break
+
+env.close()
+print(" Demo complete.")
+PY
+
+
